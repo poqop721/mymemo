@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js">
+        integrity = "sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin = "anonymous" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
+
+    <!--font-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">
+
+    <title>전성태 - 나홀로메모장 ver2.0</title>
+
+    <!-- style -->
+    <style type="text/css">
+        * {
+            font-family: 'Stylish', sans-serif;
+        }
+
+        .wrap {
+            margin: 0 auto;
+        }
+
+        .jumbotron {
+            background-color: rgba(255, 255, 255, 0.618);
+            box-shadow: 1px 1px 8px rgba(67, 67, 67, 0.712);
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .jumbotron>div {
+            width: 50%;
+        }
+
+        .signUp {
+            background-color: white;
+            margin-left: 20px;
+            border-radius: 10px;
+            width: 50%;
+            padding: 20px;
+            display: none;
+        }
+
+        .login {
+            background-color: white;
+            margin-left: 20px;
+            border-radius: 10px;
+            width: 50%;
+            padding: 20px;
+            display: none;
+            height: fit-content;
+        }
+
+        .infoMemo {
+            height: fit-content;
+            padding: 20px;
+            text-align: center;
+            margin: auto 0;
+            color: #6c6c6c;
+        }
+
+        .mobileInfo {
+            color: #6c6c6c;
+        }
+
+        .bodyunlog {
+            background: linear-gradient(#94a6c8, #c6d8f4);
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .bodylog {
+            background: linear-gradient(#aa9d91, #ffe3bb);
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .input {
+            width: 100%;
+            margin: 7px 0;
+            padding: 7px;
+            border: 0.5px solid black;
+            border-radius: 5px;
+        }
+
+        .memo_edit {
+            display: none;
+        }
+
+        .btn {
+            margin-right: 3px;
+        }
+
+        .btn-sm {
+            padding: 0 3px;
+        }
+
+        /* 저장된 메모가 없을 떄 */
+        .nomemo {
+            margin: 50px auto;
+            width: 100%;
+            text-align: center;
+        }
+
+        .nomemo>h4 {
+            color: rgb(107, 107, 107);
+        }
+
+        .card {
+            box-shadow: 1px 1px 8px rgba(67, 67, 67, 0.712);
+            border: 0px solid rgba(49, 49, 49, 0.387);
+        }
+
+
+        @keyframes scaleOnHover {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.03);
+            }
+        }
+
+        @keyframes scaleOnHoverAfter {
+            from {
+                transform: scale(1.03);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        @-webkit-keyframes scaleOnHover {
+            from {
+                -webkit-transform: scale(1);
+            }
+
+            to {
+                -webkit-transform: scale(1.03);
+            }
+        }
+
+        @-webkit-keyframes scaleOnHoverAfter {
+            from {
+                -webkit-transform: scale(1.03);
+            }
+
+            to {
+                -webkit-transform: scale(1);
+            }
+        }
+
+
+        #importance {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #importance>span {
+            display: block;
+            width: 17px;
+            height: 17px;
+            border-radius: 4px;
+            margin: 5px;
+            border: 0.5px solid rgb(91, 91, 91);
+            cursor: pointer;
+
+        }
+
+        #importance>span:hover {
+            scale: 1.1;
+        }
+
+        #importance>span:first-child {
+            background-color: rgb(254, 101, 101);
+            margin-left: 5px;
+        }
+
+        #importance>span:nth-child(2) {
+            background-color: rgb(101, 202, 118);
+        }
+
+        #importance>span:nth-child(3) {
+            background-color: rgb(173, 100, 225);
+        }
+
+        #importance>span:nth-child(4) {
+            background-color: rgb(100, 167, 225);
+        }
+
+        #importance>span:nth-child(5) {
+            background-color: rgb(255, 255, 255);
+            border: 3px solid blue;
+        }
+
+        .color1 {
+            background-color: rgb(254, 101, 101);
+            color: white;
+        }
+
+        .color2 {
+            background-color: rgb(101, 202, 118);
+            color: white;
+        }
+
+        .color3 {
+            background-color: rgb(173, 100, 225);
+            color: white;
+        }
+
+        .color4 {
+            background-color: rgb(100, 167, 225);
+            color: white;
+        }
+
+        .color5 {
+            background-color: rgb(255, 255, 255);
+        }
+
+        .date_text {
+            color: rgb(230, 230, 230);
+        }
+
+        .color5 .date_text {
+            color: rgb(158, 158, 158)
+        }
+
+        .popover {
+            background-color: wheat !important;
+        }
+
+
+        /* desktop 규격 */
+        @media screen and (min-width: 1024px) {
+
+            .wrap {
+                width: 1000px;
+            }
+
+            .jumbotron {
+                border-radius: 10px;
+                margin-top: 20px;
+            }
+
+            .jumbotron>div {
+                width: 400px;
+            }
+
+            .card {
+                width: 18rem;
+                border-radius: 10px;
+            }
+
+            .card-body {
+                border-radius: 10px;
+            }
+
+            .signUp {
+                margin-left: 20px;
+                width: 50%;
+            }
+
+            .login {
+                margin-left: 20px;
+                width: 50%;
+            }
+
+            .mobileInfo {
+                display: none;
+            }
+        }
+
+        /* tablet 규격 */
+        @media screen and (max-width: 1023px) {
+            body {
+                height: 100vh;
+            }
+
+            .wrap {
+                width: 700px;
+            }
+
+            .jumbotron {
+                border-radius: 10px;
+                margin-top: 20px;
+            }
+
+            .jumbotron>div {
+                width: 400px;
+            }
+
+            .card {
+                width: 14rem;
+                border-radius: 10px;
+            }
+
+            .card-body {
+                border-radius: 10px;
+            }
+
+            .signUp {
+                margin-left: 20px;
+                width: 50%;
+            }
+
+            .login {
+                margin-left: 20px;
+                width: 50%;
+            }
+
+            .mobileInfo {
+                display: none;
+                text-align: center;
+            }
+        }
+
+        /* mobile 규격 */
+        @media screen and (max-width: 576px) {
+            body {
+                height: 100%;
+            }
+
+            .wrap {
+                width: 100vw;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .jumbotron {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 0;
+                border-radius: 0;
+            }
+
+            .jumbotron>div {
+                width: 90%;
+            }
+
+            #card-list {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card {
+                width: 22rem !important;
+                border-radius: 0;
+            }
+
+            .card-body {
+                border-radius: 0px;
+            }
+
+            .signUp {
+                margin-top: 30px;
+                margin-left: 0px;
+                width: 90%;
+            }
+
+            .login {
+                margin-top: 30px;
+                margin-left: 0px;
+                width: 90%;
+            }
+
+            .infoMemo {
+                display: none !important;
+            }
+
+            .mobileInfo {
+                display: block;
+                text-align: center;
+            }
+
+            .jumbotron>div>h1 {
+                text-align: center;
+            }
+
+            #importance {
+                justify-content: center;
+            }
+
+            .jumboBtns {
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+                padding: 0 20px;
+            }
+        }
+
+        /* mobile landscape 규격 */
+        @media only screen and (max-height: 576px) and (orientation: landscape) {
+            .wrap {
+                width: 100vw;
+            }
+
+            body {
+                height: 100%;
+            }
+
+            .jumbotron {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 0;
+                border-radius: 0;
+            }
+
+            .jumbotron>div {
+                width: 90%;
+            }
+
+            #card-list {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card {
+                width: 35rem !important;
+                border-radius: 0;
+            }
+
+            .card-body {
+                border-radius: 0px;
+            }
+
+            .signUp {
+                margin-top: 30px;
+                width: 90%;
+                margin-left: 0px;
+            }
+
+            .login {
+                margin-top: 30px;
+                width: 90%;
+                margin-left: 0px;
+            }
+
+            .infoMemo {
+                display: none !important;
+            }
+
+            .mobileInfo {
+                display: block;
+            }
+
+            .jumbotron>div>h1 {
+                text-align: center;
+            }
+
+            #importance {
+                justify-content: center;
+            }
+
+            .jumboBtns {
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+                padding: 0 70px;
+            }
+        }
+    </style>
+    <script>
+            $(document).ready(function () {
+                showMemos();
+            });
+
+        let isChanging = false // 수정중인 메모가 있는지 저장하는 global 변수
+        let update_backColor = 5
+        let logged = false
+        let logged_id = ''
+
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+
+        //메모 가져와서 보여주기
+        function showMemos() {
+            $("#card-list").html("");
+            $.ajax({
+                type: "GET",
+                url: "/memo",
+                data: {},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        if (response['logged']) {
+                            logged = true
+                            logged_id = response['id']
+                            $('body').removeClass('bodyunlog')
+                            $('body').addClass('bodylog')
+                            $('#showLogInBtn').text('로그아웃')
+                            $('#showSignUpBtn').css('display', 'none')
+                            $('.allMemo').empty()
+                            $('.allMemo').append(`
+                            <h3>나만의 메모</h3><br>
+                <h4>현재 내 아이디에 저장된 나의 메모를 보고 계십니다. 모두의 메모를 보기 위해서는 로그아웃 해주십시오.</h4>
+                            `)
+                            $('.mobileInfo').text('나만의 메모')
+                            $('.mobileInfo').attr('data-content', '현재 내 아이디에 저장된 나의 메모를 보고 계십니다. 모두의 메모를 보기 위해서는 로그아웃 해주십시오.')
+                        }
+                        memos = response['memo']
+                        card_container = $('#card-list')
+                        // 저장된 메모가 없을 때
+                        if (memos.length == 0) {
+                            $('.wrap').append('<div class="nomemo"><h4>저장된 메모가 없습니다.</h4></div>')
+                            return
+                        } else $('.nomemo').remove()
+                        for (let i = 0; i < memos.length; i++) {
+                            let memoDate = memos[i]['changed'] ? '(수정됨) ' + memos[i]['date'] : memos[i]['date']
+                            let memo =
+                                `
+                            <div class="card" id='${memos[i]['_id']}'>
+                                <div class="card-body color${memos[i]['color']}">
+                                    <div class='memo_noedit'>
+                                        <h5 class="card-title">${memos[i]['title']}</h5>
+                                        <h6 class="card-subtitle mb-2 date_text">${memoDate}</h6>
+                                        <p class="card-text">${memos[i]['text']}</p>
+                                        <button type="button" class="btn btn-secondary btn-sm" onclick="updateMemos('${memos[i]['_id']}','${memos[i]['color']}')">수정</button>
+                                        <button type="button" class="btn btn-dark btn-sm" onclick="deleteMemos('${memos[i]['_id']}')">삭제</button>
+                                    </div>
+                                    <div class="memo_edit">
+                                        <input type="text" class="input mod-title" placeholder="메모 제목을 입력하세요" value="${memos[i]['title']}">
+                                        <div><textarea class="input mod-text" placeholder="내용을 입력하세요">${memos[i]['text']}</textarea></div>
+                                        <div id='importance'>
+                                            배경색 : <span id='col1' onclick="selectColor('${memos[i]['_id']}',1)"></span>
+                                            <span id='col2' onclick="selectColor('${memos[i]['_id']}',2)"></span>
+                                            <span id='col3' onclick="selectColor('${memos[i]['_id']}',3)"></span>
+                                            <span id='col4' onclick="selectColor('${memos[i]['_id']}',4)"></span>
+                                            <span id='col5' onclick="selectColor('${memos[i]['_id']}',5)"></span>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm" onclick="saveUpdate('${memos[i]['_id']}')">저장</button>
+                                        <button type="button" class="btn btn-secondary btn-sm" onclick="cancleEdit('${memos[i]['_id']}')">취소</button>
+                                    </div>
+                                </div>
+                            </div>
+                            `
+                            card_container.append(memo)
+                        }
+                        isChanging = false // 편집중인 메모가 없음 (아래 함수 참고)
+                        $('#pressed_id').remove() // 수정 후 모달에 남아있는 저장된 id 제거 (아래 함수 참고)
+                        update_backColor = 5
+                        if (navigator.appVersion.indexOf("Chrome/") != -1) {
+                            $('.card').hover(function () {
+                                $(this).css('animation', 'scaleOnHover 0.1s linear forwards')
+                            }, function () {
+                                $(this).css('animation', 'scaleOnHoverAfter 0.1s linear none')
+                            });
+                        } 
+                    } else alert('서버로부터 정보를 불러 올 수 없습니다.')
+                }
+            })
+        }
+
+        //메모를 저장
+        function postMemos() {
+            let title = $('#input-title')
+            let text = $('#input-text')
+            //제목이 입력되지 않았을 때
+            if (title.val() == "") {
+                alert("제목을 먼저 입력해주세요.")
+                title.focus()
+                return
+            }
+            $.ajax({
+                type: "POST",
+                url: "/memo",
+                data: { 'title': title.val(), 'text': text.val(), 'color': update_backColor, 'id': logged_id },
+                success: function (response) {
+                    if (response["result"] == "success") {
+
+                        alert('저장 완료!');
+                        title.val("")
+                        text.val("")
+                        showMemos();
+                    }
+                    else alert('서버 오류')
+                }
+            })
+        }
+
+        //수정한 메모를 저장
+        function saveUpdate(id) {
+            let update_title = $(`#${id} .mod-title`)
+            let update_text = $(`#${id} .mod-text`)
+            if (update_title.val() == "") { // 수정창에서 제목이 입력되지 않았을 때
+                alert('제목을 입력해주세요.')
+                update_title.focus()
+                return
+            }
+            $.ajax({
+                type: "POST",
+                url: "/updatememo",
+                data: { '_id': id, 'title': update_title.val(), 'text': update_text.val(), 'color': update_backColor },
+                success: function (response) {
+                    if (response["result"] == "success") {
+
+                        alert('수정 완료!');
+                        showMemos();
+                        isChanging = false // 수정중인 메모가 없음을 알리는 true
+                        update_backColor = 5
+                    }
+                    else alert('서버 오류')
+                }
+            })
+        }
+
+        //선택한 메모를 편집모드로 바꿈
+        function updateMemos(id, color) {
+            //기존에 수정중인 메모가 있을 때
+            if (isChanging) {
+                modal_event('다른 메모를 수정', '수정', id)
+                return
+            }
+            $(`#${id} .memo_noedit`).css('display', 'none')
+            $(`#${id} .memo_edit`).css('display', 'block')
+            $('#pressed_id').remove()
+            $(`#${id} span`).css('border', '1px solid rgb(91, 91, 91)')
+            $(`#${id} #col${color}`).css('border', '3px solid blue')
+            isChanging = true  // 현재 수정중인 메모가 있음을 알리는 true
+            update_backColor = color
+        }
+
+        //선택한 메모를 삭제
+        function deleteMemos(id) {
+            //기존에 수정중인 메모가 있을 때
+            if (isChanging) {
+                modal_event('삭제를 계속', '삭제', id)
+                return
+            } else {
+                var result = confirm('이 메모를 삭제하시겠습니까?')
+                if (!result) return
+            }
+            $.ajax({
+                type: "POST",
+                url: "/deletememo",
+                data: { '_id': id },
+                success: function (response) {
+                    if (response["result"] == "success") {
+
+                        alert('삭제 완료!');
+                        showMemos();
+                    }
+                    else alert('서버 오류')
+                }
+            })
+        }
+
+        //모달 창에 나타낼 메세지를 저장하고, 선택한 메모의 id값을 모달에 저장한다음, 모달창을 보여줌
+        function modal_event(str1, str2, id) {
+            $('#modal_body').text(str1)
+            $('#modal_btn').text(str2)
+            $('#myModal').append(`<a id="pressed_id" style="display:none">${id}</a>`)
+            $('#myModal').modal('show')
+        }
+
+        //모달 창에서 positive 버튼이 눌렸을 때
+        function modal_btn_pressed() {
+            $('#myModal').modal('hide')
+            isChanging = false
+            update_backColor = 5
+            if ($('#modal_btn').text() == '삭제') {
+                deleteMemos($('#pressed_id').text())
+            } else {
+                //기존에 편집모드로 바뀌어있던 메모 닫기
+                $('.memo_edit').css('display', 'none')
+                $('.memo_noedit').css('display', 'block')
+
+                updateMemos($('#pressed_id').text())
+            }
+
+        }
+
+        //모달 창에서 취소 버튼이 눌렸을 때
+        function cancle_btn() {
+            $('#pressed_id').remove()  // 모달에 저장한 Id값을 삭제
+        }
+
+        //편집 취소
+        function cancleEdit(id) {
+            $(`#${id} .memo_noedit`).css('display', 'block')
+            $(`#${id} .memo_edit`).css('display', 'none')
+            isChanging = false
+            update_backColor = 5
+            $('#pressed_id').remove()
+        }
+        function selectColor(id, num) {
+            $(`#${id} span:not(.badge)`).css('border', '1px solid rgb(91, 91, 91)')
+            $(`#${id} #col${num}`).css('border', '3px solid blue')
+            update_backColor = num
+        }
+        function openSignUp() {
+            if ($('.signUp').css('display') == 'none') {
+                $('.signUp').show()
+                $('.infoMemo').hide()
+                $('#showSignUpBtn').removeClass('btn-success')
+                $('#showSignUpBtn').addClass('btn-secondary')
+                $('#showSignUpBtn').text('회원가입 닫기')
+                $('.login').css('display', 'none')
+                $('#showLogInBtn').addClass('btn-danger')
+                $('#showLogInBtn').removeClass('btn-secondary')
+                $('#showLogInBtn').text('로그인')
+            }
+            else {
+                $('.signUp').hide()
+                $('.infoMemo').show()
+                $('#showSignUpBtn').addClass('btn-success')
+                $('#showSignUpBtn').removeClass('btn-secondary')
+                $('#showSignUpBtn').text('회원가입')
+            }
+        }
+
+        function openLogIn() {
+            if (logged) {
+                alert('로그아웃 되었습니다.')
+                window.location.href = '/logout'
+                return
+            }
+            if ($('.login').css('display') == 'none') {
+                $('.login').show()
+                $('.infoMemo').hide()
+                $('#showLogInBtn').removeClass('btn-danger')
+                $('#showLogInBtn').addClass('btn-secondary')
+                $('#showLogInBtn').text('로그인 닫기')
+                $('#showSignUpBtn').addClass('btn-success')
+                $('#showSignUpBtn').removeClass('btn-secondary')
+                $('.signUp').css('display', 'none')
+                $('#showSignUpBtn').text('회원가입')
+            }
+            else {
+                $('.login').hide()
+                $('.infoMemo').show()
+                $('#showLogInBtn').addClass('btn-danger')
+                $('#showLogInBtn').removeClass('btn-secondary')
+                $('#showLogInBtn').text('로그인')
+            }
+        }
+
+        function signUp() {
+            let id = $('#signup_id').val()
+            let pw = $('#signup_pw').val()
+            let pw_check = $('#signup_pw_check').val()
+            if (id == '' || pw == '' || pw_check == '') {
+                alert('빈칸을 채워주세요.')
+                return
+            }
+            else if (pw != pw_check) {
+                alert('비밀번호를 다시 확인해주세요.')
+                $('#signup_pw_check').focus()
+                return
+            }
+            $.ajax({
+                type: "POST",
+                url: "/signup",
+                data: { 'id': id, 'pw': pw },
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert(response["msg"]);
+                        window.location.reload();
+                    }
+                    else {
+                        alert(response["msg"])
+                        $('#signup_id').focus()
+                    }
+                }
+            })
+        }
+
+        function login() {
+            let id = $('#login_id').val()
+            let pw = $('#login_pw').val()
+            if (id == '' || pw == '') {
+                alert('빈칸을 채워주세요.')
+                return
+            }
+            $.ajax({
+                type: "POST",
+                url: "/login",
+                data: { 'id': id, 'pw': pw },
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert(response['msg']);
+                        window.location.reload();
+                    }
+                    else {
+                        alert(response['msg']);
+                    }
+                }
+            })
+        }
+    </script>
+
+</head>
+
+<body class="bodyunlog">
+    <div class="wrap">
+        <div class="jumbotron" id="save">
+            <div>
+                <h1>나홀로메모장&nbsp;<span class="badge badge-secondary">ver2.0</span></h1>
+                <h3 class="mobileInfo" data-container="body" data-toggle="popover" data-placement="bottom"
+                    data-content="현재 누구나 작성 가능한 공용 메모를 보고 계십니다. 로그인 하시면 나만의 메모를 작성하실 수 있습니다.">모두의메모</h3>
+                <input type="text" id="input-title" class="input" placeholder="메모 제목을 입력하세요">
+                <div><textarea id="input-text" class="input" rows="3" placeholder="내용을 입력하세요"></textarea></div>
+                <div id='importance'>
+                    메모 배경색 : <span id='col1' onclick="selectColor('save',1)"></span>
+                    <span id='col2' onclick="selectColor('save',2)"></span>
+                    <span id='col3' onclick="selectColor('save',3)"></span>
+                    <span id='col4' onclick="selectColor('save',4)"></span>
+                    <span id='col5' onclick="selectColor('save',5)"></span>
+                </div>
+                <div class="jumboBtns">
+                    <button type="submit" class="btn btn-primary" onclick="postMemos()">저장하기</button>
+                    <button type="submit" class="btn btn-danger" id="showLogInBtn" onclick="openLogIn()">로그인</button>
+                    <button type="submit" class="btn btn-success" id="showSignUpBtn"
+                        onclick="openSignUp()">회원가입</button>
+                </div>
+            </div>
+            <div class="infoMemo allMemo">
+                <h3>모두의 메모</h3><br>
+                <h4>현재 누구나 작성 가능한 공용 메모를 보고 계십니다. 로그인 하시면 나만의 메모를 작성하실 수 있습니다.</h4>
+            </div>
+            <form class="signUp">
+                <p>
+                <h3>회원가입</h3>
+                </p>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">아이디</span>
+                    <input type="text" id="signup_id" class="form-control" placeholder="아이디를 입력해주세요"
+                        aria-label="Recipient's username" aria-describedby="basic-addon2">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">비밀번호</span>
+                    <input type="password" id="signup_pw" class="form-control" id="exampleInputPassword1"
+                        placeholder="비밀번호를 입력해주세요.">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">비밀번호 확인</span>
+                    <input type="password" id="signup_pw_check" class="form-control" id="exampleInputPassword1"
+                        placeholder="비밀번호를 한번 더 입력해주세요.">
+                </div>
+                <button type="button" class="btn btn-success" onclick="signUp()">회원가입</button>
+            </form>
+            <form class="login">
+                <p>
+                <h3>로그인</h3>
+                </p>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon2">아이디</span>
+                        <input type="text" id="login_id" class="form-control" placeholder="아이디를 입력해주세요."
+                            aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">비밀번호</span>
+                    <input type="password" id="login_pw" class="form-control" id="exampleInputPassword1"
+                        placeholder="비밀번호를 입력해주세요.">
+                </div>
+                <button type="button" class="btn btn-danger" onclick="login()">로그인</button>
+            </form>
+        </div>
+        <div id="card-list" class="card-columns">
+        </div>
+    </div>
+    <!-- 이미 수정중인 메모가 있는 상황에서 다른 메모의 삭제나 수정이 눌렸을 때 나오는 모달 -->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">현재 수정중인 메모가 있습니다.</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cancle_btn()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    기존 메모 수정을 취소하고 <span id="modal_body"></span> 하시겠습니까? (기존에 수정중이던 내용은 전부 삭제됩니다.)
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        onclick="cancle_btn()">취소</button>
+                    <button type="button" class="btn btn-primary" onclick="modal_btn_pressed()"><span
+                            id="modal_btn"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
