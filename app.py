@@ -12,7 +12,7 @@ db = client.mymemo
 dblog = client.login 
 app.secret_key = str(random.randrange(1, 100000))
 
-## HTML을 주는 부분
+## HTML을 주는 부분 
 @app.route('/')
 def home():
    return render_template('index.html')
